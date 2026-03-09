@@ -77,7 +77,7 @@ class CurrencyCalculator
         foreach ($table->rates as $rate) {
             if ($rate->code->getValue() === $code) {
                 if ($rate->averageRate === null) {
-                    throw new \InvalidArgumentException(sprintf('Kalkulator wymaga Tabel A/B dla kursów średnich. Nie można użyć Tabeli C (Bid/Ask) dla waluty: %s', $code));
+                    throw new \InvalidArgumentException(sprintf('Calculator requires Table A/B for average rates. Table C (Bid/Ask) cannot be used for currency: %s', $code));
                 }
                 // Here getValue() on ExchangeRateValue is already returning a string under new BCmath rules setup
                 return $rate->averageRate->getValue();

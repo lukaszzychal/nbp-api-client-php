@@ -18,7 +18,7 @@ class DateValueTest extends TestCase
 
     public function testValidatesLeapYearCorrectly(): void
     {
-        $date = new DateValue('2024-02-29'); // 2024 to przestępny
+        $date = new DateValue('2024-02-29'); // 2024 is a leap year
         $this->assertSame('2024-02-29', $date->getValue());
     }
 
@@ -33,7 +33,7 @@ class DateValueTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid date format');
-        new DateValue('2026-02-31'); // Niepoprawna data (nieistniejący)
+        new DateValue('2026-02-31'); // Invalid date (non-existent day)
     }
 
     public function testToStringReturnsFormattedDate(): void

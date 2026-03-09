@@ -15,7 +15,7 @@ class CurrencyCode
     {
         $code = strtoupper(trim($code));
         
-        // Zabezpieczenie na puste ciągi z braku danych lub dziwne kody krótsze niż 3
+        // Guard against empty strings from missing data or codes shorter than 3 characters
         if ($code !== '' && !preg_match('/^[A-Z]{3}$/', $code)) {
             throw new \InvalidArgumentException(sprintf('Invalid Currency Code format "%s".', $code));
         }

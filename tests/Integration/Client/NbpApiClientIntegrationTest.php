@@ -22,7 +22,7 @@ class NbpApiClientIntegrationTest extends TestCase
         $this->httpClient = new FakeHttpClient();
         $this->psr17Factory = new Psr17Factory();
         
-        // Fabryka żądań dla ustandardyzowanych requestów wg PSR-17
+        // PSR-17 request factory for standardised requests
         $this->client = new NbpApiClient($this->httpClient, $this->psr17Factory);
     }
 

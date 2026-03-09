@@ -25,7 +25,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
     private const BASE_URL = 'http://api.nbp.pl/api/';
     
     /**
-     * Maksymalna liczba powtórzeń po błędzie z serwera 5xx
+     * Maximum number of retries after a 5xx server error
      */
     private const MAX_RETRIES = 3;
 
@@ -43,7 +43,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Wstrzykuje opcjonalny system cache PSR-6
+     * Injects optional PSR-6 cache system
      */
     public function setCache(CacheItemPoolInterface $cache, int $ttlSeconds = 3600): void
     {
@@ -82,8 +82,8 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Wewnętrzna metoda wykonująca żądanie z obsługą ponawiania dla błędów 5xx oraz opcjonalnym Cache PSR-6.
-     * Wykorzystuje zaimplementowanegy Loggera z LoggerAwareTrait, o ile wstrzyknięty.
+     * Internal method to perform request with retry support for 5xx errors and optional PSR-6 Cache.
+     * Uses the injected Logger if available.
      * 
      * @return array<mixed>
      * @throws \RuntimeException
@@ -148,13 +148,13 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
                         $this->logger->warning(sprintf('NbpApiClient (try: %d): Re-trying after status code %d on %s', $attempt, $statusCode, $endpoint));
                     }
                     
-                    usleep((int) (100000 * $attempt)); // Backoff 100ms * próba
+                    usleep((int) (100000 * $attempt)); // Backoff 100ms * attempt
                     continue;
                 }
 
                 throw new \RuntimeException(sprintf('API Error. Status Code: %d. Body: %s', $statusCode, (string) $response->getBody()));
             } catch (ClientExceptionInterface $e) {
-                // Wyjątki sieciowe HTTPClient
+                // HTTPClient network exceptions
                 $lastException = $e;
                 
                 if ($this->logger !== null) {
@@ -302,8 +302,8 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Zwraca wartość tekstową z tablicy JSON, lub pusty string jako the fallback.
-     * Metoda wspierająca koncepcję Intention-Revealing (Self-Documenting Code).
+     * Returns string value from JSON array, or empty string as fallback.
+     * Method supporting the Intention-Revealing concept (Self-Documenting Code).
      *
      * @param array<mixed> $data
      */
@@ -313,7 +313,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Zwraca wartość rzutowaną prosto na numeryczny the string, chroniąc procedury bcmath.
+     * Returns value cast directly to numeric string, protecting bcmath procedures.
      *
      * @param array<mixed> $data
      */
@@ -323,8 +323,8 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Zwraca wartość rzutowaną bezpiecznie na numeric-string, powstrzymując
-     * notację naukową przy rzutowaniu małych floatów. Zwraca null jeśli klucz nie istnieje.
+     * Returns value safely cast to numeric-string, preventing
+     * scientific notation when casting small floats. Returns null if key does not exist.
      *
      * @param array<mixed> $data
      */
@@ -337,7 +337,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
         $val = $data[$key];
 
         if (is_float($val)) {
-            // Wymuś 8 miejsc po przecinku by zapobiec naukowej notacji "4.1E-5" i utnij nadmiar zer.
+            // Force 8 decimal places to prevent scientific notation "4.1E-5" and trim trailing zeros.
             $str = sprintf('%.8F', $val);
             if (str_contains($str, '.')) {
                 $str = rtrim($str, '0');

@@ -11,8 +11,8 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Psr18Client;
 
 /**
- * Testy Kontraktowe. Uruchamiane jako niezależna część procesu wdrażania za pomocą adnotowanej grupy
- * Działają one bezpośrednio z wystawionym na zewnątrz serwami NBP API i weryfikują działanie usługi klienta na żywym orgaznie.
+ * Contract Tests. Run as an independent part of the deployment process using the annotated group.
+ * They interact directly with the publicly exposed NBP API servers and verify the client service behaviour on real data.
  * @group contract
  */
 class NbpApiContractTest extends TestCase
@@ -29,7 +29,7 @@ class NbpApiContractTest extends TestCase
 
     public function testRealApiRespondsWithValidCurrencyTable(): void
     {
-        // Sprawdź czy dzisiejsza Tabela A jest poprawnie budowana na zewnątrz, jeśli odpowiedź serwera jest >200
+        // Verify that today's Table A is correctly built from the external server if the response is > 200
         $result = $this->client->getCurrencyTable('A');
 
         $this->assertNotEmpty($result);
@@ -42,7 +42,7 @@ class NbpApiContractTest extends TestCase
 
     public function testRealApiRespondsWithValidGoldPricesForDateRange(): void
     {
-        // Okres kilku Dni
+        // A few-day range
         $result = $this->client->getGoldPricesForDateRange('2024-03-01', '2024-03-05');
 
         $this->assertNotEmpty($result);

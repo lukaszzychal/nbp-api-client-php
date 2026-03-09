@@ -11,12 +11,12 @@ use Psr\Cache\CacheItemPoolInterface;
 interface NbpApiClientInterface
 {
     /**
-     * Setter do wstrzykiwania opcjonalnej pamięci podręcznej (PSR-6)
+     * Setter for injecting optional PSR-6 cache
      */
     public function setCache(CacheItemPoolInterface $cache, int $ttlSeconds = 3600): void;
 
     /**
-     * Pobiera aktualną tabelę kursów.
+     * Fetches the current exchange rate table.
      * @return CurrencyTable[]
      * @throws \RuntimeException
      */
