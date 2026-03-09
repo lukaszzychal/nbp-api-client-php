@@ -1,13 +1,32 @@
 {
     "name": "lukaszzychal/nbp-api-client-php",
-    "description": "Biblioteka PHP do obsługi oficjalnego API NBP (Narodowy Bank Polski) - pobieranie kursów walut, cen złota w formacie DTO.",
+    "description": "PHP client library for the official NBP (National Bank of Poland) API. Fetches currency exchange rates and gold prices as typed DTOs with PSR-3, PSR-6, PSR-7, PSR-17, PSR-18 support.",
     "type": "library",
     "license": "MIT",
+    "keywords": [
+        "nbp",
+        "national-bank-of-poland",
+        "currency",
+        "exchange-rate",
+        "gold-price",
+        "psr-6",
+        "psr-18",
+        "api-client",
+        "php"
+    ],
+    "homepage": "https://github.com/lukaszzychal/nbp-api-client-php",
     "authors": [
         {
-            "name": "Lukasz Zychal"
+            "name": "Lukasz Zychal",
+            "email": "lukasz.zychal.dev@gmail.com",
+            "role": "Developer",
+            "homepage": "https://github.com/lukaszzychal"
         }
     ],
+    "support": {
+        "issues": "https://github.com/lukaszzychal/nbp-api-client-php/issues",
+        "source": "https://github.com/lukaszzychal/nbp-api-client-php"
+    },
     "require": {
         "php": ">=8.1",
         "ext-bcmath": "*",
@@ -51,5 +70,7 @@
         "allow-plugins": {
             "php-http/discovery": true
         }
-    }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
