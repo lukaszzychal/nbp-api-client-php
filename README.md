@@ -34,8 +34,10 @@ $requestFactory = new Psr17Factory();
 $client = new NbpApiClient($httpClient, $requestFactory);
 
 // Injecting Cache and Logger
-// $client->setLogger($myPsr3Logger); // Info, network errors, and warnings
-// $client->setCache($myPsr6CacheItemPool, 21600); // 1-day limit before the next HTTP request
+// $client->setLogger($myPsr3Logger);           // PSR-3: info, network errors, warnings
+// $client->setCache($myPsr6CacheItemPool, 21600); // Enable PSR-6 cache with 6h TTL
+// $client->disableCache();                     // Disable cache at runtime
+// See docs/developer_usage_guide.md#5-psr-6-caching for full details
 ```
 
 ### Features
@@ -61,7 +63,9 @@ $usdAmount = $calculator->convert($amount, 'PLN', 'USD', $tables[0]);
 # Calculates the exchange for 1000 PLN to USD using the NBP reference rate
 ```
 ### Framework Integration
-For detailed instructions on how to integrate this library with **Laravel** or **Symfony**, please refer to the [Developer Usage Guide](docs/developer_usage_guide.md#5-framework-integration).
+For detailed instructions on how to integrate this library with **Laravel** or **Symfony**, please refer to the [Developer Usage Guide](docs/developer_usage_guide.md#6-framework-integration).
+
+For complete information on **PSR-6 caching** (enabling, disabling, TTL, available adapters) see the [Caching section](docs/developer_usage_guide.md#5-psr-6-caching).
 
 ### Dev Mode (Integration Tests and Static Analysis)
 The system is protected with a full integration suite using PHPUnit. Unit tests (for the calculator) and rigorous integration logic tested via injected Mock `FakeHttpClient` do not hit the external interface outside the designated Contract Tests area, operating mostly on simulated static files.
@@ -101,9 +105,11 @@ $requestFactory = new Psr17Factory();
 
 $client = new NbpApiClient($httpClient, $requestFactory);
 
-// Wstrzykiwanie Cache'a i oprowadzeń po strumieniach
-// $client->setLogger($myPsr3Logger); // Info, błąd sieci i ostrzeżenia.
-// $client->setCache($myPsr6CacheItemPool, 21600); // 1 doba limitu przed zapytaniem HTTP (na ogół kursy ulegają zmianie we wczesne popołudnie dnia roboczego)
+// Wstrzykiwanie Cache'a i Loggera
+// $client->setLogger($myPsr3Logger);           // PSR-3: info, błędy sieciowe, ostrzeżenia
+// $client->setCache($myPsr6CacheItemPool, 21600); // Cache PSR-6 z TTL 6 godzin
+// $client->disableCache();                     // Wyłączenie cache w trakcie działania
+// Pełna dokumentacja: docs/developer_usage_guide.md#5-psr-6-caching
 ```
 
 ### Funkcjonalność
@@ -129,7 +135,9 @@ $usdAmount = $calculator->convert($amount, 'PLN', 'USD', $tables[0]);
 # Oblicza kurs 1000 PLN do dolarów korzystając z notowania wyjściowego NBP
 ```
 ### Integracja z Frameworkami
-Szczegółowe instrukcje dotyczące integracji z **Laravel** oraz **Symfony** znajdziesz w dokumencie [Developer Usage Guide](docs/developer_usage_guide.md#5-framework-integration).
+Szczegółowe instrukcje dotyczące integracji z **Laravel** oraz **Symfony** znajdziesz w dokumencie [Developer Usage Guide](docs/developer_usage_guide.md#6-framework-integration).
+
+Pełna dokumentacja **cache PSR-6** (włączanie, wyłączanie, TTL, dostępne adaptery) dostępna w sekcji [Caching](docs/developer_usage_guide.md#5-psr-6-caching).
 
 ### Tryb Dev (Testy integracji i analiza Statyczna)
 System chroniony pełną szatą integracji pod PHPUnit. Testy jednostkowe (kalkulator), jak i rygorystyczne integracje logiki bazy testowane przez wstrzyknięty Mock FakeHttpClient nie uderzają do interfejsu zewnętrznego w testach poza wyznaczonym rejonem kontrolnym Contract Testów, a operują na statycznych plikach symulowanych.

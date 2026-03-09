@@ -52,6 +52,14 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
     }
 
     /**
+     * Disables the cache entirely. Any subsequent requests will go directly to the NBP API.
+     */
+    public function disableCache(): void
+    {
+        $this->cache = null;
+    }
+
+    /**
      * @return \LukaszZychal\NbpApiClient\Model\CurrencyTable[]
      * @throws \RuntimeException
      */

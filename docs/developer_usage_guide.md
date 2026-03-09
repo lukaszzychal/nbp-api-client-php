@@ -67,7 +67,76 @@ $plnAmount = $calculator->convert(100, 'USD', 'PLN', $tableA);
 > [!IMPORTANT]
 > The calculator only works with tables that provide an `averageRate` (Table A and B). It will throw an `InvalidArgumentException` if you try to use it with Table C.
 
-### 5. Framework Integration
+### 5. PSR-6 Caching
+
+Caching is **disabled by default**. Every call to the API goes directly to the NBP servers unless you explicitly inject a PSR-6 cache pool.
+
+#### Enabling Cache
+
+Call `setCache()` after creating the client. The second argument is the TTL in seconds (default: `3600` — 1 hour):
+
+```php
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+
+$cache = new FilesystemAdapter();
+
+$client->setCache($cache);           // TTL = 3600 s (1 hour, default)
+$client->setCache($cache, 1800);     // TTL = 1800 s (30 minutes)
+$client->setCache($cache, 86400);    // TTL = 86400 s (24 hours)
+```
+
+> [!TIP]
+> NBP publishes new exchange rate tables once a day (usually in the early afternoon on working days). A TTL of `21600` (6 hours) or `86400` (24 hours) is a good balance between freshness and performance.
+
+#### How the Cache Works Internally
+
+Each unique API endpoint URL is hashed with `md5()` and used as a cache key:
+
+```
+nbp_api_cache_<md5(endpoint)>
+```
+
+On every request:
+1. If a valid cache item exists (`isHit() === true`) → return cached data immediately, **no HTTP request is made**.
+2. If cache is cold or expired → execute HTTP request, store result in cache with the configured TTL, return data.
+
+#### Cache Key Examples
+
+| Method call | Cache key (prefix + md5) |
+|---|---|
+| `getCurrencyTable('A')` | `nbp_api_cache_<md5('exchangerates/tables/A/?format=json')>` |
+| `getCurrencyTableForDate('A', '2026-03-01')` | `nbp_api_cache_<md5('exchangerates/tables/A/2026-03-01/?format=json')>` |
+| `getGoldPrices()` | `nbp_api_cache_<md5('cenyzlota/?format=json')>` |
+
+Each combination of table type + date has its own independent cache entry.
+
+#### Disabling Cache at Runtime
+
+Use `disableCache()` to stop using cache for all subsequent requests without destroying the client instance:
+
+```php
+$client->setCache($cache, 3600); // cache is now active
+
+// ... some requests hit the cache ...
+
+$client->disableCache(); // cache is now off — next requests go directly to NBP API
+
+// ... fresh data fetched directly ...
+
+$client->setCache($cache, 3600); // re-enable if needed
+```
+
+#### Available PSR-6 Adapters
+
+Any library implementing `Psr\Cache\CacheItemPoolInterface` will work:
+
+| Package | Adapter class |
+|---|---|
+| `symfony/cache` | `FilesystemAdapter`, `RedisAdapter`, `MemcachedAdapter`, `ArrayAdapter` |
+| `cache/filesystem-adapter` | `FilesystemCachePool` |
+| Laravel | `Illuminate\Cache\Repository` (via bridge) |
+
+### 6. Framework Integration
 
 The library can be easily integrated with modern frameworks using Dependency Injection.
 

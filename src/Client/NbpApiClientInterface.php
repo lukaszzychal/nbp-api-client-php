@@ -16,6 +16,11 @@ interface NbpApiClientInterface
     public function setCache(CacheItemPoolInterface $cache, int $ttlSeconds = 3600): void;
 
     /**
+     * Disables the cache entirely. Any subsequent requests will go directly to the NBP API.
+     */
+    public function disableCache(): void;
+
+    /**
      * Fetches the current exchange rate table.
      * @return CurrencyTable[]
      * @throws \RuntimeException
