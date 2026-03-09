@@ -3,3 +3,4 @@
 /.phpunit.cache/
 .DS_Store
 docs/clean_code_architecture.md
+.php-cs-fixer.cache
