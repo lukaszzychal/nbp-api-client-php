@@ -23,7 +23,7 @@ class NbpApiContractTest extends TestCase
     {
         $httpClient = new Psr18Client(HttpClient::create());
         $requestFactory = new Psr17Factory();
-        
+
         $this->client = new NbpApiClient($httpClient, $requestFactory);
     }
 

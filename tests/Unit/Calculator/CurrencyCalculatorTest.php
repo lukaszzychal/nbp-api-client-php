@@ -26,8 +26,8 @@ class CurrencyCalculatorTest extends TestCase
             new DateValue('2026-01-01'),
             [
                 new CurrencyRate('dolar', new CurrencyCode('USD'), new ExchangeRateValue(4.00)),
-                new CurrencyRate('euro', new CurrencyCode('EUR'), new ExchangeRateValue(4.30))
-            ]
+                new CurrencyRate('euro', new CurrencyCode('EUR'), new ExchangeRateValue(4.30)),
+            ],
         );
     }
 

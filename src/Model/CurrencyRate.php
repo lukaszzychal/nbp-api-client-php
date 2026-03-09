@@ -18,7 +18,6 @@ class CurrencyRate
         public readonly CurrencyCode $code,
         public readonly ?ExchangeRateValue $averageRate = null,
         public readonly ?ExchangeRateValue $buyRate = null,
-        public readonly ?ExchangeRateValue $sellRate = null
-    ) {
-    }
+        public readonly ?ExchangeRateValue $sellRate = null,
+    ) {}
 }

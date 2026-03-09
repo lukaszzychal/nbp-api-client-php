@@ -15,9 +15,9 @@ class NbpApiClientTest extends TestCase
     {
         $httpClientMock = $this->createMock(ClientInterface::class);
         $requestFactoryMock = $this->createMock(\Psr\Http\Message\RequestFactoryInterface::class);
-        
+
         $client = new NbpApiClient($httpClientMock, $requestFactoryMock);
-        
+
         $this->assertInstanceOf(NbpApiClient::class, $client);
     }
 
@@ -37,7 +37,7 @@ class NbpApiClientTest extends TestCase
 
         $successResponse = $this->createMock(\Psr\Http\Message\ResponseInterface::class);
         $successResponse->method('getStatusCode')->willReturn(200);
-        
+
         $streamMock = $this->createMock(\Psr\Http\Message\StreamInterface::class);
         $streamMock->method('__toString')->willReturn('[{"table":"A","no":"123","effectiveDate":"2023-01-01","rates":[]}]');
         $successResponse->method('getBody')->willReturn($streamMock);
@@ -47,7 +47,7 @@ class NbpApiClientTest extends TestCase
             ->willReturnOnConsecutiveCalls(
                 $errorResponse,
                 $errorResponse,
-                $successResponse
+                $successResponse,
             );
 
         $client = new NbpApiClient($httpClientMock, $requestFactoryMock);

@@ -42,15 +42,15 @@ class CurrencyCalculator
 
         // Calculate amount * fromRate using ext-bcmath. Keep precision extra high initially
         $valueInPlnStr = bcmul($amountStr, $fromRateStr, 8);
-        
+
         // Finalize valueInPln / toRate keeping user desired scale precision
         return bcdiv($valueInPlnStr, $toRateStr, $scale);
     }
 
     /**
-     * Resolves the exchange rate for a given currency code. 
+     * Resolves the exchange rate for a given currency code.
      * Treats the base currency (PLN) as a 1:1 equivalent.
-     * 
+     *
      * @return numeric-string
      * @throws \InvalidArgumentException
      */

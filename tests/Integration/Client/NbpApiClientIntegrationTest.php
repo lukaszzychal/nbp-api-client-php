@@ -21,7 +21,7 @@ class NbpApiClientIntegrationTest extends TestCase
     {
         $this->httpClient = new FakeHttpClient();
         $this->psr17Factory = new Psr17Factory();
-        
+
         // PSR-17 request factory for standardised requests
         $this->client = new NbpApiClient($this->httpClient, $this->psr17Factory);
     }
@@ -50,19 +50,19 @@ class NbpApiClientIntegrationTest extends TestCase
 
         $this->httpClient->addResponse(
             'http://api.nbp.pl/api/exchangerates/tables/A/?format=json',
-            new Response(200, ['Content-Type' => 'application/json'], $jsonResponse)
+            new Response(200, ['Content-Type' => 'application/json'], $jsonResponse),
         );
 
         $result = $this->client->getCurrencyTable('A');
 
         $this->assertCount(1, $result);
         $this->assertInstanceOf(CurrencyTable::class, $result[0]);
-        
+
         $table = $result[0];
         $this->assertSame('A', $table->table);
         $this->assertSame('046/A/NBP/2026', $table->tableNumber->getValue());
         $this->assertSame('2026-03-08', $table->effectiveDate->getValue());
-        
+
         $this->assertCount(2, $table->rates);
         $this->assertSame('USD', $table->rates[0]->code->getValue());
         $this->assertSame('3.9512', $table->rates[0]->averageRate->getValue());
@@ -74,7 +74,7 @@ class NbpApiClientIntegrationTest extends TestCase
 
         $this->httpClient->addResponse(
             'http://api.nbp.pl/api/exchangerates/tables/A/2026-05-15/?format=json',
-            new Response(200, ['Content-Type' => 'application/json'], $jsonResponse)
+            new Response(200, ['Content-Type' => 'application/json'], $jsonResponse),
         );
 
         $result = $this->client->getCurrencyTableForDate('A', '2026-05-15');
@@ -90,7 +90,7 @@ class NbpApiClientIntegrationTest extends TestCase
 
         $this->httpClient->addResponse(
             'http://api.nbp.pl/api/exchangerates/tables/C/2026-01-01/2026-01-31/?format=json',
-            new Response(200, ['Content-Type' => 'application/json'], $jsonResponse)
+            new Response(200, ['Content-Type' => 'application/json'], $jsonResponse),
         );
 
         $result = $this->client->getCurrencyTableForDateRange('C', '2026-01-01', '2026-01-31');
@@ -106,7 +106,7 @@ class NbpApiClientIntegrationTest extends TestCase
 
         $this->httpClient->addResponse(
             'http://api.nbp.pl/api/cenyzlota/2026-06-01/?format=json',
-            new Response(200, ['Content-Type' => 'application/json'], $jsonResponse)
+            new Response(200, ['Content-Type' => 'application/json'], $jsonResponse),
         );
 
         $result = $this->client->getGoldPricesForDate('2026-06-01');
@@ -122,7 +122,7 @@ class NbpApiClientIntegrationTest extends TestCase
 
         $this->httpClient->addResponse(
             'http://api.nbp.pl/api/cenyzlota/2026-06-01/2026-06-02/?format=json',
-            new Response(200, ['Content-Type' => 'application/json'], $jsonResponse)
+            new Response(200, ['Content-Type' => 'application/json'], $jsonResponse),
         );
 
         $result = $this->client->getGoldPricesForDateRange('2026-06-01', '2026-06-02');

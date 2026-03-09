@@ -28,12 +28,12 @@ try {
     echo "[PL] Pobieranie tabeli A (dzisiejszy kurs średni)...\n";
     echo "[EN] Fetching Table A (today's average exchange rate)...\n";
     $tables = $client->getCurrencyTable('A');
-    
+
     if (!empty($tables)) {
         $recentTable = $tables[0];
         echo sprintf("[PL] Tabela z dnia: %s. Posiada %d walut.\n", $recentTable->effectiveDate, count($recentTable->rates));
         echo sprintf("[EN] Table from date: %s. Contains %d currencies.\n", $recentTable->effectiveDate, count($recentTable->rates));
-        
+
         // 3. [PL] Kalkulator walutowy krzyżowy / [EN] Cross-currency calculator
         $calculator = new CurrencyCalculator();
         $amountPln = 1000.0;
@@ -60,20 +60,22 @@ try {
         $recentTableC = $tablesC[0];
         echo sprintf("[PL] Tabela C z dnia: %s. Posiada %d walut.\n", $recentTableC->effectiveDate, count($recentTableC->rates));
         echo sprintf("[EN] Table C from date: %s. Contains %d currencies.\n", $recentTableC->effectiveDate, count($recentTableC->rates));
-        
+
         if (count($recentTableC->rates) > 0) {
             $firstC = $recentTableC->rates[0];
-            echo sprintf("[PL] Przykład z C: %s (%s) - Kupno (Bid): %s | Sprzedaż (Ask): %s\n", 
-                $firstC->currency, 
+            echo sprintf(
+                "[PL] Przykład z C: %s (%s) - Kupno (Bid): %s | Sprzedaż (Ask): %s\n",
+                $firstC->currency,
                 (string) $firstC->code,
                 $firstC->buyRate?->getValue() ?? 'brak',
-                $firstC->sellRate?->getValue() ?? 'brak'
+                $firstC->sellRate?->getValue() ?? 'brak',
             );
-            echo sprintf("[EN] Example from C: %s (%s) - Buy (Bid): %s | Sell (Ask): %s\n", 
-                $firstC->currency, 
+            echo sprintf(
+                "[EN] Example from C: %s (%s) - Buy (Bid): %s | Sell (Ask): %s\n",
+                $firstC->currency,
                 (string) $firstC->code,
                 $firstC->buyRate?->getValue() ?? 'N/A',
-                $firstC->sellRate?->getValue() ?? 'N/A'
+                $firstC->sellRate?->getValue() ?? 'N/A',
             );
         }
     }
@@ -83,7 +85,7 @@ try {
     echo "[PL] Pobieranie notowań złota (historyczne)...\n";
     echo "[EN] Fetching historical gold prices...\n";
     $golds = $client->getGoldPricesForDateRange('2024-01-01', '2024-01-05');
-    
+
     foreach ($golds as $gold) {
         echo sprintf("[PL] Dnia %s za kruszec liczono %s PLN / g\n", (string) $gold->date, $gold->price->getValue());
         echo sprintf("[EN] On %s the bullion price was %s PLN / g\n", (string) $gold->date, $gold->price->getValue());

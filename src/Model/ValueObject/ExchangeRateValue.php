@@ -20,7 +20,7 @@ class ExchangeRateValue
     public function __construct(string|float|int $rate)
     {
         $stringRate = (string) $rate;
-        
+
         // Use bccomp to safely compare string float numbers. Returns 1 if left-operand is larger.
         // Third param is scale - NBP usually returns 4 decimal places, providing 8 is safe.
         if (bccomp($stringRate, '0', 8) <= 0) {

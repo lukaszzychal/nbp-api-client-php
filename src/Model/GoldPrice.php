@@ -15,7 +15,6 @@ class GoldPrice
 {
     public function __construct(
         public readonly DateValue $date,
-        public readonly ExchangeRateValue $price
-    ) {
-    }
+        public readonly ExchangeRateValue $price,
+    ) {}
 }

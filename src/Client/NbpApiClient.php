@@ -23,7 +23,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
     use LoggerAwareTrait;
 
     private const BASE_URL = 'http://api.nbp.pl/api/';
-    
+
     /**
      * Maximum number of retries after a 5xx server error
      */
@@ -33,10 +33,10 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
     private RequestFactoryInterface $requestFactory;
     private ?CacheItemPoolInterface $cache = null;
     private int $cacheTtl = 3600;
-    
+
     public function __construct(
         ClientInterface $httpClient,
-        RequestFactoryInterface $requestFactory
+        RequestFactoryInterface $requestFactory,
     ) {
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;
@@ -92,7 +92,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
     /**
      * Internal method to perform request with retry support for 5xx errors and optional PSR-6 Cache.
      * Uses the injected Logger if available.
-     * 
+     *
      * @return array<mixed>
      * @throws \RuntimeException
      */
@@ -125,7 +125,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
 
         while ($attempt < self::MAX_RETRIES) {
             $attempt++;
-            
+
             try {
                 if ($this->logger !== null) {
                     $this->logger->info(sprintf('NbpApiClient (try: %d): Executing GET request to %s', $attempt, self::BASE_URL . $endpoint));
@@ -155,7 +155,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
                     if ($this->logger !== null) {
                         $this->logger->warning(sprintf('NbpApiClient (try: %d): Re-trying after status code %d on %s', $attempt, $statusCode, $endpoint));
                     }
-                    
+
                     usleep((int) (100000 * $attempt)); // Backoff 100ms * attempt
                     continue;
                 }
@@ -164,11 +164,11 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
             } catch (ClientExceptionInterface $e) {
                 // HTTPClient network exceptions
                 $lastException = $e;
-                
+
                 if ($this->logger !== null) {
                     $this->logger->error(sprintf('NbpApiClient (try: %d): ClientException -> %s', $attempt, $e->getMessage()));
                 }
-                
+
                 usleep((int) (100000 * $attempt));
                 continue;
             } catch (\JsonException $e) {
@@ -186,7 +186,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
         throw new \RuntimeException(
             sprintf('Failed to communicate with NBP API after %d retries', self::MAX_RETRIES),
             0,
-            $lastException
+            $lastException,
         );
     }
 
@@ -210,7 +210,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
                     if (is_array($rateItem)) {
                         $currency = $this->getStringValue($rateItem, 'currency');
                         $codeStr = $this->getStringValue($rateItem, 'code');
-                        
+
                         $midStr = $this->getNumericStringValueOrNull($rateItem, 'mid');
                         $bidStr = $this->getNumericStringValueOrNull($rateItem, 'bid');
                         $askStr = $this->getNumericStringValueOrNull($rateItem, 'ask');
@@ -224,7 +224,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
                             new CurrencyCode($codeStr),
                             $midVal,
                             $bidVal,
-                            $askVal
+                            $askVal,
                         );
                     }
                 }
@@ -238,7 +238,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
                 $tableStr,
                 new TableNumber($noStr),
                 new DateValue($effectiveDateStr),
-                $rates
+                $rates,
             );
         }
 
@@ -298,7 +298,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
 
             $prices[] = new GoldPrice(
                 new DateValue($dateStr),
-                new ExchangeRateValue($priceString)
+                new ExchangeRateValue($priceString),
             );
         }
 

@@ -20,7 +20,6 @@ class CurrencyTable
         public readonly string $table,
         public readonly TableNumber $tableNumber,
         public readonly DateValue $effectiveDate,
-        public readonly array $rates
-    ) {
-    }
+        public readonly array $rates,
+    ) {}
 }
