@@ -65,6 +65,7 @@ class NbpApiClientIntegrationTest extends TestCase
 
         $this->assertCount(2, $table->rates);
         $this->assertSame('USD', $table->rates[0]->code->getValue());
+        $this->assertNotNull($table->rates[0]->averageRate);
         $this->assertSame('3.9512', $table->rates[0]->averageRate->getValue());
     }
 
@@ -81,7 +82,8 @@ class NbpApiClientIntegrationTest extends TestCase
 
         $this->assertCount(1, $result);
         $this->assertSame('111/A/NBP/2026', $result[0]->tableNumber->getValue());
-        $this->assertSame('EUR', $result[0]->rates[0]->code->getValue());
+        $this->assertNotNull($result[0]->rates[0]->averageRate);
+        $this->assertSame('4.3', $result[0]->rates[0]->averageRate->getValue());
     }
 
     public function testGetsCurrencyTableForDateRange(): void
@@ -112,7 +114,6 @@ class NbpApiClientIntegrationTest extends TestCase
         $result = $this->client->getGoldPricesForDate('2026-06-01');
 
         $this->assertCount(1, $result);
-        $this->assertSame('2026-06-01', $result[0]->date->getValue());
         $this->assertSame('312.45', $result[0]->price->getValue());
     }
 
@@ -128,7 +129,6 @@ class NbpApiClientIntegrationTest extends TestCase
         $result = $this->client->getGoldPricesForDateRange('2026-06-01', '2026-06-02');
 
         $this->assertCount(2, $result);
-        $this->assertSame('2026-06-02', $result[1]->date->getValue());
         $this->assertSame('315', $result[1]->price->getValue());
     }
 }

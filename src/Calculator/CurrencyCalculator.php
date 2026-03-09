@@ -30,6 +30,7 @@ class CurrencyCalculator
     {
         $fromCodeStr = (string) $fromCode;
         $toCodeStr = (string) $toCode;
+        /** @var numeric-string $amountStr */
         $amountStr = (string) $amount;
 
         if ($fromCodeStr === $toCodeStr) {
@@ -41,10 +42,14 @@ class CurrencyCalculator
         $toRateStr = $this->resolveExchangeRate($toCodeStr, $table);
 
         // Calculate amount * fromRate using ext-bcmath. Keep precision extra high initially
-        $valueInPlnStr = bcmul($amountStr, $fromRateStr, 8);
+        /** @var numeric-string $valueInPlnStr */
+        $valueInPlnStr = (string) bcmul($amountStr, $fromRateStr, 8);
 
         // Finalize valueInPln / toRate keeping user desired scale precision
-        return bcdiv($valueInPlnStr, $toRateStr, $scale);
+        /** @var numeric-string $converted */
+        $converted = (string) bcdiv($valueInPlnStr, $toRateStr, $scale);
+
+        return $converted;
     }
 
     /**

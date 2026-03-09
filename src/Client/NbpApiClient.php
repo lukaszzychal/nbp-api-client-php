@@ -211,8 +211,11 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
                         $currency = $this->getStringValue($rateItem, 'currency');
                         $codeStr = $this->getStringValue($rateItem, 'code');
 
+                        /** @var numeric-string|null $midStr */
                         $midStr = $this->getNumericStringValueOrNull($rateItem, 'mid');
+                        /** @var numeric-string|null $bidStr */
                         $bidStr = $this->getNumericStringValueOrNull($rateItem, 'bid');
+                        /** @var numeric-string|null $askStr */
                         $askStr = $this->getNumericStringValueOrNull($rateItem, 'ask');
 
                         $midVal = $midStr !== null ? new ExchangeRateValue($midStr) : null;
@@ -294,6 +297,7 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
             }
 
             $dateStr = $this->getStringValue($item, 'data');
+            /** @var numeric-string $priceString */
             $priceString = $this->getNumericStringValue($item, 'cena');
 
             $prices[] = new GoldPrice(
@@ -354,6 +358,6 @@ class NbpApiClient implements NbpApiClientInterface, LoggerAwareInterface
             return $str;
         }
 
-        return (string) $val;
+        return is_scalar($val) || $val instanceof \Stringable ? (string) $val : '';
     }
 }
