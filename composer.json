@@ -1,6 +1,6 @@
 {
     "name": "lukaszzychal/nbp-api-client-php",
-    "description": "PHP client library for the official NBP (National Bank of Poland) API. Fetches currency exchange rates and gold prices as typed DTOs with PSR-3, PSR-6, PSR-7, PSR-17, PSR-18 support.",
+    "description": "PHP client library for National Bank of Poland (NBP) Web API. Provides access to Polish currency exchange rates, gold prices, and financial data. Features current and historical rates, XML/JSON support, error handling, and caching.",
     "type": "library",
     "license": "MIT",
     "keywords": [
